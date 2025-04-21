@@ -2,42 +2,29 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { changePassword } from '../services/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { recoverPassword } from '../services/api';
 
-// Pantalla para cambiar contraseña
-const ChangePasswordScreen = () => {
+// Pantalla para recuperar contraseña
+const RecoverPasswordScreen = () => {
   const navigation = useNavigation();
-  const [oldPassword, setOldPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleChangePassword = async () => {
-    if (!oldPassword || !newPassword) {
-      Alert.alert('Error', 'Por favor, completa todos los campos.');
+  // Enviar solicitud de recuperación de contraseña
+  const handleRecoverPassword = async () => {
+    if (!email) {
+      Alert.alert('Error', 'Por favor, ingresa tu correo electrónico.');
       return;
     }
 
     setLoading(true);
     try {
-      const token = await AsyncStorage.getItem('userToken');
-      if (!token) {
-        Alert.alert('Error', 'Debes iniciar sesión para cambiar tu contraseña.');
-        navigation.navigate('LoginScreen');
-        return;
-      }
-
-      await changePassword({
-        clave_anterior: oldPassword,
-        clave_nueva: newPassword,
-      });
-
-      Alert.alert('Éxito', 'Contraseña cambiada exitosamente.');
-      setOldPassword('');
-      setNewPassword('');
+      await recoverPassword({ correo: email });
+      Alert.alert('Éxito', 'Se ha enviado un correo con las instrucciones para recuperar tu contraseña.');
+      setEmail('');
       navigation.goBack();
     } catch (error) {
-      Alert.alert('Error', error.message || 'No se pudo cambiar la contraseña. Intenta de nuevo.');
+      Alert.alert('Error', error.message || 'No se pudo enviar la solicitud. Intenta de nuevo.');
     } finally {
       setLoading(false);
     }
@@ -49,36 +36,28 @@ const ChangePasswordScreen = () => {
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Cambiar Contraseña</Text>
+        <Text style={styles.headerTitle}>Recuperar Contraseña</Text>
       </View>
       <View style={styles.content}>
-        <Text style={styles.label}>Contraseña Anterior</Text>
+        <Text style={styles.label}>Correo Electrónico</Text>
         <TextInput
           style={styles.input}
-          value={oldPassword}
-          onChangeText={setOldPassword}
-          secureTextEntry
-          placeholder="Ingresa tu contraseña anterior"
+          value={email}
+          onChangeText={setEmail}
+          placeholder="Ejemplo: tu.correo@example.com"
           placeholderTextColor="#999"
-        />
-        <Text style={styles.label}>Nueva Contraseña</Text>
-        <TextInput
-          style={styles.input}
-          value={newPassword}
-          onChangeText={setNewPassword}
-          secureTextEntry
-          placeholder="Ingresa tu nueva contraseña"
-          placeholderTextColor="#999"
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
         <TouchableOpacity
-          style={[styles.button, loading && styles.buttonDisabled]}
-          onPress={handleChangePassword}
+          style={[styles.submitButton, loading && styles.buttonDisabled]}
+          onPress={handleRecoverPassword}
           disabled={loading}
         >
           {loading ? (
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
-            <Text style={styles.buttonText}>Cambiar Contraseña</Text>
+            <Text style={styles.buttonText}>Enviar Solicitud</Text>
           )}
         </TouchableOpacity>
       </View>
@@ -118,6 +97,7 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     flex: 1,
+    justifyContent: 'center',
   },
   label: {
     fontSize: 16,
@@ -136,7 +116,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     elevation: 2,
   },
-  button: {
+  submitButton: {
     backgroundColor: '#FF6200', // Naranja institucional
     padding: 15,
     borderRadius: 8,
@@ -153,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ChangePasswordScreen;
+export default RecoverPasswordScreen;
