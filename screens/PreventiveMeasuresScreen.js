@@ -1,48 +1,29 @@
-import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { fetchPreventiveMeasures } from '../services/api';
 
-// Pantalla que muestra medidas preventivas para emergencias
+// Pantalla de "Medidas Preventivas"
 const PreventiveMeasuresScreen = () => {
   const navigation = useNavigation();
+  const [measures, setMeasures] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Datos estáticos de medidas preventivas
-  const measures = [
-    {
-      title: 'Preparación para Huracanes',
-      description:
-        '1. Mantén un kit de emergencia con agua, alimentos no perecederos, linternas, baterías y un botiquín.\n2. Identifica rutas de evacuación y albergues cercanos.\n3. Refuerza ventanas y puertas para proteger tu hogar.\n4. Mantente informado a través de las alertas de la Defensa Civil.',
-    },
-    {
-      title: 'Preparación para Terremotos',
-      description:
-        '1. Identifica lugares seguros en tu hogar, como debajo de muebles sólidos.\n2. Asegura objetos pesados que puedan caer, como estanterías o lámparas.\n3. Ten un plan de comunicación con tu familia.\n4. Participa en simulacros de evacuación organizados por la Defensa Civil.',
-    },
-    {
-      title: 'Inundaciones',
-      description:
-        '1. Evita construir en zonas propensas a inundaciones.\n2. Eleva electrodomésticos importantes por encima del nivel de inundación.\n3. Nunca camines o conduzcas por áreas inundadas.\n4. Sigue las advertencias y evacua si es necesario.',
-    },
-    {
-      title: 'Incendios',
-      description:
-        '1. Instala detectores de humo en tu hogar y revisa sus baterías regularmente.\n2. Mantén un extintor y aprende a usarlo.\n3. Crea un plan de escape con dos rutas de salida.\n4. No dejes velas o estufas encendidas sin supervisión.',
-    },
-    {
-      title: 'Emergencias Médicas',
-      description:
-        '1. Aprende primeros auxilios básicos y ten un botiquín bien equipado.\n2. Conoce los números de emergencia: 911 y el de la Defensa Civil (809-472-8614).\n3. Mantén una lista de contactos de emergencia.\n4. Si tienes condiciones médicas, lleva contigo tu información médica.',
-    },
-  ];
-
-  // Renderizar cada medida como una tarjeta
-  const renderMeasure = ({ item }) => (
-    <View style={styles.measureCard}>
-      <Text style={styles.measureTitle}>{item.title}</Text>
-      <Text style={styles.measureDescription}>{item.description}</Text>
-    </View>
-  );
+  // Obtener medidas preventivas desde la API
+  useEffect(() => {
+    const loadMeasures = async () => {
+      try {
+        const data = await fetchPreventiveMeasures();
+        setMeasures(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error al obtener medidas preventivas:', error);
+        setLoading(false);
+      }
+    };
+    loadMeasures();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -52,12 +33,25 @@ const PreventiveMeasuresScreen = () => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Medidas Preventivas</Text>
       </View>
-      <FlatList
-        data={measures}
-        renderItem={renderMeasure}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={styles.listContent}
-      />
+      {loading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="#FF6200" />
+          <Text style={styles.loaderText}>Cargando medidas...</Text>
+        </View>
+      ) : (
+        <ScrollView contentContainerStyle={styles.content}>
+          {measures.length > 0 ? (
+            measures.map((measure, index) => (
+              <View key={index} style={styles.measureCard}>
+                <Text style={styles.measureTitle}>{measure.titulo}</Text>
+                <Text style={styles.measureDescription}>{measure.descripcion}</Text>
+              </View>
+            ))
+          ) : (
+            <Text style={styles.noDataText}>No hay medidas preventivas disponibles.</Text>
+          )}
+        </ScrollView>
+      )}
     </View>
   );
 };
@@ -91,7 +85,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF', // Blanco
   },
-  listContent: {
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666',
+  },
+  content: {
     padding: 20,
   },
   measureCard: {
@@ -111,12 +115,18 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#003087', // Azul institucional
-    marginBottom: 10,
+    marginBottom: 8,
   },
   measureDescription: {
     fontSize: 16,
     color: '#333',
     lineHeight: 22,
+  },
+  noDataText: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 

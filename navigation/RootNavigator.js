@@ -2,27 +2,23 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-// Importar todas las pantallas
-import AboutScreen from '../screens/AboutScreen';
-import ChangePasswordScreen from '../screens/ChangePasswordScreen';
-import HistoryScreen from '../screens/HistoryScreen';
+// Importar todas las pantallas necesarias
 import HomeScreen from '../screens/HomeScreen';
-import LoginScreen from '../screens/LoginScreen';
-import MapScreen from '../screens/MapScreen';
-import MembersScreen from '../screens/MembersScreen';
-import MySituationsScreen from '../screens/MySituationsScreen';
-import NewsAuthenticatedScreen from '../screens/NewsAuthenticatedScreen';
-import NewsScreen from '../screens/NewsScreen';
-import PreventiveMeasuresScreen from '../screens/PreventiveMeasuresScreen';
 import ReportSituationScreen from '../screens/ReportSituationScreen';
-
-// Pantallas que aún no se han creado (se importarán cuando existan)
-import RecoverPasswordScreen from '../screens/RecoverPasswordScreen';
-import ServicesScreen from '../screens/ServicesScreen';
-import SheltersScreen from '../screens/SheltersScreen';
-import VideosScreen from '../screens/VideosScreen';
+import MapScreen from '../screens/MapScreen';
 import SituationMapScreen from '../screens/SituationMapScreen';
+import SheltersScreen from '../screens/SheltersScreen';
+import PreventiveMeasuresScreen from '../screens/PreventiveMeasuresScreen';
+import ServicesScreen from '../screens/ServicesScreen';
+import NewsScreen from '../screens/NewsScreen';
+import MySituationsScreen from '../screens/MySituationsScreen';
 import VolunteerScreen from '../screens/VolunteerScreen';
+import MembersScreen from '../screens/MembersScreen';
+import HistoryScreen from '../screens/HistoryScreen';
+import AboutScreen from '../screens/AboutScreen';
+import LoginScreen from '../screens/LoginScreen';
+import RecoverPasswordScreen from '../screens/RecoverPasswordScreen';
+import ChangePasswordScreen from '../screens/ChangePasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -36,23 +32,8 @@ const RootNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="AboutScreen"
-          component={AboutScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ChangePasswordScreen"
-          component={ChangePasswordScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="HistoryScreen"
-          component={HistoryScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="LoginScreen"
-          component={LoginScreen}
+          name="ReportSituationScreen"
+          component={ReportSituationScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -61,44 +42,8 @@ const RootNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="MembersScreen"
-          component={MembersScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="MySituationsScreen"
-          component={MySituationsScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="NewsAuthenticatedScreen"
-          component={NewsAuthenticatedScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="NewsScreen"
-          component={NewsScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="PreventiveMeasuresScreen"
-          component={PreventiveMeasuresScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ReportSituationScreen"
-          component={ReportSituationScreen}
-          options={{ headerShown: false }}
-        />
-        {/* Pantallas que aún no se han creado */}
-        <Stack.Screen
-          name="RecoverPasswordScreen"
-          component={RecoverPasswordScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="ServicesScreen"
-          component={ServicesScreen}
+          name="SituationMapScreen"
+          component={SituationMapScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -107,18 +52,58 @@ const RootNavigator = () => {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="VideosScreen"
-          component={VideosScreen}
+          name="PreventiveMeasuresScreen"
+          component={PreventiveMeasuresScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="SituationMapScreen"
-          component={SituationMapScreen}
+          name="ServicesScreen"
+          component={ServicesScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="NewsScreen"
+          component={NewsScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MySituationsScreen"
+          component={MySituationsScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen
           name="VolunteerScreen"
           component={VolunteerScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MembersScreen"
+          component={MembersScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="HistoryScreen"
+          component={HistoryScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="AboutScreen"
+          component={AboutScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="LoginScreen"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RecoverPasswordScreen"
+          component={RecoverPasswordScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChangePasswordScreen"
+          component={ChangePasswordScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

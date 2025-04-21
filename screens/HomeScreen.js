@@ -38,14 +38,13 @@ const HomeScreen = () => {
     { name: 'Medidas Preventivas', screen: 'PreventiveMeasuresScreen', icon: 'warning' },
     { name: 'Servicios', screen: 'ServicesScreen', icon: 'build' },
     { name: 'Noticias', screen: 'NewsScreen', icon: 'article' },
-    { name: 'Noticias Autenticadas', screen: 'NewsAuthenticatedScreen', icon: 'verified-user' },
-    { name: 'Videos', screen: 'VideosScreen', icon: 'play-circle-outline' },
     { name: 'Mis Situaciones', screen: 'MySituationsScreen', icon: 'list' },
     { name: 'Voluntario', screen: 'VolunteerScreen', icon: 'person-add' },
     { name: 'Miembros', screen: 'MembersScreen', icon: 'people' },
     { name: 'Historia', screen: 'HistoryScreen', icon: 'history' },
     { name: 'Acerca de', screen: 'AboutScreen', icon: 'info' },
     { name: 'Iniciar Sesión', screen: 'LoginScreen', icon: 'login' },
+    { name: 'Recuperar Contraseña', screen: 'RecoverPasswordScreen', icon: 'lock-open' },
     { name: 'Cambiar Contraseña', screen: 'ChangePasswordScreen', icon: 'lock' },
   ];
 
