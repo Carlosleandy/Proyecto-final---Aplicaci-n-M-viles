@@ -1,29 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { fetchAbout } from '../services/api';
 
 // Pantalla de "Acerca de"
 const AboutScreen = () => {
   const navigation = useNavigation();
-  const [aboutData, setAboutData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Obtener datos de "Acerca de" desde la API
-  useEffect(() => {
-    const loadAbout = async () => {
-      try {
-        const data = await fetchAbout();
-        setAboutData(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error al obtener datos de acerca:', error);
-        setLoading(false);
-      }
-    };
-    loadAbout();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -33,19 +15,12 @@ const AboutScreen = () => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Acerca de</Text>
       </View>
-      {loading ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#FF6200" />
-          <Text style={styles.loaderText}>Cargando información...</Text>
-        </View>
-      ) : (
-        <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.title}>Sobre la Defensa Civil</Text>
-          <Text style={styles.description}>
-            {aboutData?.descripcion || 'No se pudo cargar la información.'}
-          </Text>
-        </ScrollView>
-      )}
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.title}>Sobre la Defensa Civil</Text>
+        <Text style={styles.description}>
+          La Defensa Civil de la República Dominicana es una institución dedicada a la protección y asistencia de la población en situaciones de emergencia y desastres naturales. Fundada en 1966, su misión es coordinar acciones de prevención, mitigación y respuesta ante eventos como huracanes, inundaciones y terremotos, trabajando de la mano con voluntarios y otras organizaciones para garantizar la seguridad de las comunidades.
+        </Text>
+      </ScrollView>
     </View>
   );
 };
@@ -78,16 +53,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF', // Blanco
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loaderText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#666',
   },
   content: {
     padding: 20,

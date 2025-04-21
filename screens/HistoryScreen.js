@@ -1,29 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { fetchHistory } from '../services/api';
 
 // Pantalla de "Historia"
 const HistoryScreen = () => {
   const navigation = useNavigation();
-  const [historyData, setHistoryData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  // Obtener datos de "Historia" desde la API
-  useEffect(() => {
-    const loadHistory = async () => {
-      try {
-        const data = await fetchHistory();
-        setHistoryData(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error al obtener datos de historia:', error);
-        setLoading(false);
-      }
-    };
-    loadHistory();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -33,19 +15,12 @@ const HistoryScreen = () => {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Historia</Text>
       </View>
-      {loading ? (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="#FF6200" />
-          <Text style={styles.loaderText}>Cargando información...</Text>
-        </View>
-      ) : (
-        <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.title}>Historia de la Defensa Civil</Text>
-          <Text style={styles.description}>
-            {historyData?.descripcion || 'No se pudo cargar la información.'}
-          </Text>
-        </ScrollView>
-      )}
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text style={styles.title}>Historia de la Defensa Civil</Text>
+        <Text style={styles.description}>
+          La Defensa Civil de la República Dominicana fue creada el 22 de junio de 1966 mediante el Decreto No. 2070, durante el gobierno del Dr. Joaquín Balaguer. Su fundación tuvo como objetivo principal proteger a la población frente a desastres naturales y emergencias, en un país frecuentemente afectado por huracanes y otros fenómenos. Desde entonces, la institución ha evolucionado, incorporando miles de voluntarios y modernizando sus operaciones para responder de manera efectiva a las necesidades de la ciudadanía.
+        </Text>
+      </ScrollView>
     </View>
   );
 };
@@ -78,16 +53,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: '#FFFFFF', // Blanco
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loaderText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#666',
   },
   content: {
     padding: 20,

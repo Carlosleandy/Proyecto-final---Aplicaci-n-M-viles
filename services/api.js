@@ -2,7 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Dirección base de la API
-const API_URL = 'https://adamix.net/defensa_civil/';
+const API_URL = 'https://adamix.net/defensa_civil/def/';
 
 // Configuración de Axios con headers por defecto
 const api = axios.create({
@@ -31,7 +31,7 @@ const handleError = (error, defaultMessage) => {
 // Obtener servicios
 export const fetchServices = async () => {
   try {
-    const response = await api.get('/servicios');
+    const response = await api.get('/servicios.php');
     if (response.data.exito) {
       return response.data.datos;
     }
@@ -44,7 +44,7 @@ export const fetchServices = async () => {
 // Obtener noticias
 export const fetchNews = async () => {
   try {
-    const response = await api.get('/noticias');
+    const response = await api.get('/noticias.php');
     if (response.data.exito) {
       return response.data.datos;
     }
@@ -54,36 +54,10 @@ export const fetchNews = async () => {
   }
 };
 
-// Obtener noticias autenticadas
-export const fetchAuthenticatedNews = async () => {
-  try {
-    const response = await api.get('/noticias_autenticado');
-    if (response.data.exito) {
-      return response.data.datos;
-    }
-    throw new Error(response.data.mensaje || 'Error al obtener noticias autenticadas');
-  } catch (error) {
-    handleError(error, 'Error al obtener noticias autenticadas:');
-  }
-};
-
-// Obtener videos
-export const fetchVideos = async () => {
-  try {
-    const response = await api.get('/videos');
-    if (response.data.exito) {
-      return response.data.datos;
-    }
-    throw new Error(response.data.mensaje || 'Error al obtener videos');
-  } catch (error) {
-    handleError(error, 'Error al obtener videos:');
-  }
-};
-
 // Obtener albergues
 export const fetchShelters = async () => {
   try {
-    const response = await api.get('/albergues');
+    const response = await api.get('/albergues.php');
     if (response.data.exito) {
       return response.data.datos;
     }
@@ -93,10 +67,23 @@ export const fetchShelters = async () => {
   }
 };
 
+// Obtener medidas preventivas
+export const fetchPreventiveMeasures = async () => {
+  try {
+    const response = await api.get('/medidas_preventivas.php');
+    if (response.data.exito) {
+      return response.data.datos;
+    }
+    throw new Error(response.data.mensaje || 'Error al obtener medidas preventivas');
+  } catch (error) {
+    handleError(error, 'Error al obtener medidas preventivas:');
+  }
+};
+
 // Obtener miembros
 export const fetchMembers = async () => {
   try {
-    const response = await api.get('/miembros');
+    const response = await api.get('/miembros.php');
     if (response.data.exito) {
       return response.data.datos;
     }
@@ -109,7 +96,7 @@ export const fetchMembers = async () => {
 // Obtener situaciones
 export const fetchSituations = async () => {
   try {
-    const response = await api.get('/situaciones');
+    const response = await api.post('/situaciones.php');
     if (response.data.exito) {
       return response.data.datos;
     }
@@ -119,36 +106,10 @@ export const fetchSituations = async () => {
   }
 };
 
-// Obtener información "Acerca de"
-export const fetchAbout = async () => {
-  try {
-    const response = await api.get('/acerca');
-    if (response.data.exito) {
-      return response.data.datos;
-    }
-    throw new Error(response.data.mensaje || 'Error al obtener información de acerca');
-  } catch (error) {
-    handleError(error, 'Error al obtener información de acerca:');
-  }
-};
-
-// Obtener información de "Historia"
-export const fetchHistory = async () => {
-  try {
-    const response = await api.get('/historia');
-    if (response.data.exito) {
-      return response.data.datos;
-    }
-    throw new Error(response.data.mensaje || 'Error al obtener información de historia');
-  } catch (error) {
-    handleError(error, 'Error al obtener información de historia:');
-  }
-};
-
 // Registrar voluntario
 export const registerVolunteer = async (data) => {
   try {
-    const response = await api.post('/registrar_voluntario', data);
+    const response = await api.post('/registro.php', data);
     if (response.data.exito) {
       return response.data;
     }
@@ -161,9 +122,9 @@ export const registerVolunteer = async (data) => {
 // Iniciar sesión
 export const login = async (credentials) => {
   try {
-    const response = await api.post('/iniciar_sesion', credentials);
+    const response = await api.post('/iniciar_sesion.php', credentials);
     if (response.data.exito) {
-      const { token, user_id } = response.data.datos; // Asumiendo que la API devuelve token y user_id
+      const { token, id: user_id } = response.data.datos; // Ajustado según la respuesta de la API
       await AsyncStorage.setItem('userToken', token);
       await AsyncStorage.setItem('userId', user_id.toString());
       return { token, user_id };
@@ -177,7 +138,7 @@ export const login = async (credentials) => {
 // Recuperar contraseña
 export const recoverPassword = async (data) => {
   try {
-    const response = await api.post('/recuperar_contrasena', data);
+    const response = await api.post('/recuperar_clave.php', data);
     if (response.data.exito) {
       return response.data;
     }
@@ -190,7 +151,7 @@ export const recoverPassword = async (data) => {
 // Reportar situación
 export const reportSituation = async (data) => {
   try {
-    const response = await api.post('/reportar_situacion', data);
+    const response = await api.post('/nueva_situacion.php', data);
     if (response.data.exito) {
       return response.data;
     }
@@ -203,7 +164,7 @@ export const reportSituation = async (data) => {
 // Obtener mis situaciones
 export const fetchMySituations = async () => {
   try {
-    const response = await api.get('/mis_situaciones');
+    const response = await api.post('/situaciones.php');
     if (response.data.exito) {
       return response.data.datos;
     }
@@ -216,7 +177,7 @@ export const fetchMySituations = async () => {
 // Cambiar contraseña
 export const changePassword = async (data) => {
   try {
-    const response = await api.post('/cambiar_clave', data);
+    const response = await api.post('/cambiar_clave.php', data);
     if (response.data.exito) {
       return response.data;
     }
